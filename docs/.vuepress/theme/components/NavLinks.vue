@@ -1,22 +1,13 @@
 <template>
-  <nav
-    v-if="userLinks.length || repoLink"
-    class="nav-links"
-  >
+  <nav class="nav-links" v-if="userLinks.length || repoLink">
     <!-- user links -->
     <div
+      class="nav-item"
       v-for="item in userLinks"
       :key="item.link"
-      class="nav-item"
     >
-      <DropdownLink
-        v-if="item.type === 'links'"
-        :item="item"
-      />
-      <NavLink
-        v-else
-        :item="item"
-      />
+      <DropdownLink v-if="item.type === 'links'" :item="item" />
+      <NavLink v-else :item="item" />
     </div>
 
     <!-- repo link -->
@@ -27,49 +18,49 @@
       target="_blank"
       rel="noopener noreferrer"
     >
+      <reco-icon :icon="`reco-${repoLabel.toLowerCase()}`" />
       {{ repoLabel }}
-      <OutboundLink />
+      <OutboundLink/>
     </a>
   </nav>
 </template>
 
 <script>
-import DropdownLink from '@theme/components/DropdownLink.vue'
-import { resolveNavLinkItem } from '../util'
-import NavLink from '@theme/components/NavLink.vue'
+import { defineComponent, computed, getCurrentInstance } from 'vue-demi'
+import { RecoIcon } from '@vuepress-reco/core/lib/components'
+import DropdownLink from '@theme/components/DropdownLink'
+import { resolveNavLinkItem } from '@theme/helpers/utils'
+import NavLink from '@theme/components/NavLink'
 
-export default {
-  name: 'NavLinks',
+export default defineComponent({
+  components: { NavLink, DropdownLink, RecoIcon },
 
-  components: {
-    NavLink,
-    DropdownLink
-  },
+  setup (props, ctx) {
+    const instance = getCurrentInstance().proxy
 
-  computed: {
-    userNav () {
-      return this.$themeLocaleConfig.nav || this.$site.themeConfig.nav || []
-    },
+    const userNav = computed(() => {
+      return instance.$themeLocaleConfig.nav || instance.$themeConfig.nav || []
+    })
 
-    nav () {
-      const { locales } = this.$site
+    const nav = computed(() => {
+      const locales = instance.$site.locales || {}
+
       if (locales && Object.keys(locales).length > 1) {
-        const currentLink = this.$page.path
-        const routes = this.$router.options.routes
-        const themeLocales = this.$site.themeConfig.locales || {}
+        const currentLink = instance.$page.path
+        const routes = instance.$router.options.routes
+        const themeLocales = instance.$themeConfig.locales || {}
         const languageDropdown = {
-          text: this.$themeLocaleConfig.selectText || 'Languages',
-          ariaLabel: this.$themeLocaleConfig.ariaLabel || 'Select language',
+          text: instance.$themeLocaleConfig.selectText || 'Languages',
           items: Object.keys(locales).map(path => {
             const locale = locales[path]
             const text = themeLocales[path] && themeLocales[path].label || locale.lang
             let link
             // Stay on the current page
-            if (locale.lang === this.$lang) {
+            if (locale.lang === instance.$lang) {
               link = currentLink
             } else {
               // Try to stay on the same page
-              link = currentLink.replace(this.$localeConfig.path, path)
+              link = currentLink.replace(instance.$localeConfig.path, path)
               // fallback to homepage
               if (!routes.some(route => route.path === link)) {
                 link = path
@@ -78,36 +69,83 @@ export default {
             return { text, link }
           })
         }
-        return [...this.userNav, languageDropdown]
-      }
-      return this.userNav
-    },
 
-    userLinks () {
-      return (this.nav || []).map(link => {
+        return [...userNav.value, languageDropdown]
+      }
+
+      // blogConfig 的处理，根绝配置自动添加分类和标签
+      const blogConfig = instance.$themeConfig.blogConfig || {}
+      const isHasCategory = userNav.value.some(item => {
+        if (blogConfig.category) {
+          return item.text === (blogConfig.category.text || '分类')
+        } else {
+          return true
+        }
+      })
+      const isHasTag = userNav.value.some(item => {
+        if (blogConfig.tag) {
+          return item.text === (blogConfig.tag.text || '标签')
+        } else {
+          return true
+        }
+      })
+
+      if (!isHasCategory && Object.hasOwnProperty.call(blogConfig, 'category')) {
+        const category = blogConfig.category
+        const $categories = instance.$categories
+        userNav.value.splice(parseInt(category.location || 2) - 1, 0, {
+          items: $categories.list.map(item => {
+            item.link = item.path
+            item.text = item.name
+            console.log(item);
+            return item
+          }),
+          text: category.text || instance.$recoLocales.category,
+          type: 'links',
+          icon: 'reco-category'
+        })
+      }
+
+      if (!isHasTag && Object.hasOwnProperty.call(blogConfig, 'tag')) {
+        const tag = blogConfig.tag
+        userNav.value.splice(parseInt(tag.location || 3) - 1, 0, {
+          link: '/tag/',
+          text: tag.text || instance.$recoLocales.tag,
+          type: 'links',
+          icon: 'reco-tag'
+        })
+      }
+
+      return userNav.value
+    })
+
+    const userLinks = computed(() => {
+      return (instance.nav || []).map(link => {
         return Object.assign(resolveNavLinkItem(link), {
           items: (link.items || []).map(resolveNavLinkItem)
         })
       })
-    },
+    })
 
-    repoLink () {
-      const { repo } = this.$site.themeConfig
+    const repoLink = computed(() => {
+      const { repo } = instance.$themeConfig
+
       if (repo) {
         return /^https?:/.test(repo)
           ? repo
           : `https://github.com/${repo}`
       }
-      return null
-    },
 
-    repoLabel () {
-      if (!this.repoLink) return
-      if (this.$site.themeConfig.repoLabel) {
-        return this.$site.themeConfig.repoLabel
+      return ''
+    })
+
+    const repoLabel = computed(() => {
+      if (!instance.repoLink) return ''
+      if (instance.$themeConfig.repoLabel) {
+        return instance.$themeConfig.repoLabel
       }
 
-      const repoHost = this.repoLink.match(/^https?:\/\/[^/]+/)[0]
+      const repoHost = instance.repoLink.match(/^https?:\/\/[^/]+/)[0]
       const platforms = ['GitHub', 'GitLab', 'Bitbucket']
       for (let i = 0; i < platforms.length; i++) {
         const platform = platforms[i]
@@ -117,9 +155,11 @@ export default {
       }
 
       return 'Source'
-    }
+    })
+
+    return { userNav, nav, userLinks, repoLink, repoLabel }
   }
-}
+})
 </script>
 
 <style lang="stylus">
@@ -127,13 +167,15 @@ export default {
   display inline-block
   a
     line-height 1.4rem
-    color inherit
+    color var(--text-color)
     &:hover, &.router-link-active
       color $accentColor
+      .iconfont
+        color $accentColor
   .nav-item
     position relative
     display inline-block
-    margin-left 2rem
+    margin-left 1.5rem
     line-height 2rem
     &:first-child
       margin-left 0
@@ -146,10 +188,7 @@ export default {
       margin-left 0
 
 @media (min-width: $MQMobile)
-  .nav-links a
-    &:hover, &.router-link-active
-      color $textColor
   .nav-item > a:not(.external)
     &:hover, &.router-link-active
-      color black
+      margin-bottom -2px
 </style>
