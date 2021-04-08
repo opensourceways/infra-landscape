@@ -29,11 +29,16 @@ module.exports = {
         sidebarDepth: 2,
         modePicker: false,
         search: false,
-        footer: true,
-        icpRecord: '蜀ICP备20009468号-1',
-        icpRecordLink: 'https://icp.chinaz.com/home/info?host=osinfra.cn',
-        policeRecord: '粤公网安备 44030702003822号',
-        policeRecordLink: 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003822',
-        startYear: '2021',
-    }
+        issuesLink:'https://github.com/opensourceways/infra-landscape/issues',
+        editText:'如果您有任何问题和改进建议，欢迎您随时联系',
+        issuesLinkText:'github issue',
+        footer:{
+            copyright:'MIT Licensed | Copyright © opensourceways infrastructure',
+            icpRecord: '蜀ICP备20009468号-1',
+            icpRecordLink: 'https://icp.chinaz.com/home/info?host=osinfra.cn',
+            policeRecord: '粤公网安备 44030702003822号',
+            policeRecordLink: 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003822',
+            startYear: '2021',
+        },
+    },
 }

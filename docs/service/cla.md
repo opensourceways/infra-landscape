@@ -1,4 +1,12 @@
-# CLA服务
+---
+title: CLA服务
+date: 2021-03-21
+author: liuqi
+categories:
+ - service
+tags:
+ - service
+---
 ## CLA服务介绍
     CLA 的全称是 Contributor License Agreement。如果一个人要贡献代码给一个开源项目，比如 Google TensorFlow，那么她需要在 Git上签署 Google 发布的 Individual CLA。这个签署过程很简单，贡献者只需输入自己的姓名和电子邮件等可以标志自己身份的信息即可。如果一个贡献者没有签署CLA，那么这个贡献者发给 Google TensorFlow 项目的修改（Github 的术语称为 pull request）会被 Github 标志为不可被接受。签署了之后，这个 pull request 就是可以在 review 之后被接受的了。
 在这里贴一个知乎上面关于CLA的[介绍](https://zhuanlan.zhihu.com/p/68251730)

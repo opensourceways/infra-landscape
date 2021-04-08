@@ -3,21 +3,21 @@
     <span>
       <reco-icon icon="reco-copyright"/>
       <a>
-      <span>MIT Licensed | Copyright © opensourceways infrastructure</span>
+      <span v-if="$themeConfig.footer.copyright">{{$themeConfig.footer.copyright}}</span>
       </a>
     </span>
-        <span v-if="$themeConfig.icpRecord">
+        <span v-if="$themeConfig.footer.icpRecord">
       <reco-icon icon="reco-beian"/>
-      <a target="_blank" :href="$themeConfig.icpRecordLink || '#'">{{ $themeConfig.icpRecord }}</a>
+      <a target="_blank" :href="$themeConfig.footer.icpRecordLink || '#'">{{ $themeConfig.footer.icpRecord }}</a>
     </span>
-        <span v-if="$themeConfig.policeRecord">
-      <a target="_blank" :href="$themeConfig.policeRecordLink || '#'">{{ $themeConfig.policeRecord }}</a>
+        <span v-if="$themeConfig.footer.policeRecord">
+      <a target="_blank" :href="$themeConfig.footer.policeRecordLink || '#'">{{ $themeConfig.footer.policeRecord }}</a>
     </span>
         <span>
       <reco-icon icon="reco-date"/>
       <a>
-        <span v-if="$themeConfig.author">{{ $themeConfig.author }}</span>
-        <span v-if="$themeConfig.startYear && $themeConfig.startYear != (new Date().getFullYear())">{{ $themeConfig.startYear }} - </span>
+        <span v-if="$themeConfig.footer.author">{{ $themeConfig.footer.author }}</span>
+        <span v-if="$themeConfig.footer.startYear && $themeConfig.footer.startYear != (new Date().getFullYear())">{{ $themeConfig.footer.startYear }} - </span>
         {{ new Date().getFullYear() }}
       </a>
     </span>

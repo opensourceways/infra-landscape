@@ -9,5 +9,4 @@ actionText_faq: FAQ
 actionLink_faq: /faq/
 actionText_contact: Contact us
 actionLink_contact: /contact/faq
-footer: true
 ---

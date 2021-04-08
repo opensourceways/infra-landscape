@@ -6,7 +6,6 @@ categories:
  - service
 tags:
  - service
-footer: true
 ---
 # 应用上线介绍💻
 当前基础设施维护了openEuler，openGauss，openLooKeng，MindSpore, Ascend等5个社区的基础设施服务，同时也支持社区开发者上线自己的服务，提供给社区。  

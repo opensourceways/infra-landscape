@@ -2,7 +2,7 @@
     <Common :sidebarItems="sidebarItems" :showModule="recoShowModule">
         <component v-if="$frontmatter.home" :is="homeCom"/>
         <Page v-else :sidebar-items="sidebarItems"/>
-        <Footer v-if="$frontmatter.footer" class="footer"/>
+        <Footer v-if="$themeConfig.footer" class="footer"/>
     </Common>
 </template>
 
@@ -28,12 +28,12 @@
             },
         },
         mounted() {
-            if (this.$frontmatter.footer) {
+            if (this.$themeConfig.footer) {
                 this.changePageHeight()
             }
         },
         updated() {
-            if (this.$frontmatter.footer) {
+            if (this.$themeConfig.footer) {
                 this.changePageHeight()
             }
         },
