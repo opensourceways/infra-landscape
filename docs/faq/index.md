@@ -7,6 +7,6 @@ tags:
  - faq
 footer: true
 ---
-### [邮件列表相关](/faq/mailinglist)
-### [基于VM搭建repo镜像源](/faq/repo-site)
+### [邮件列表相关](/faq/mailinglist.md)
+### [基于VM搭建repo镜像源](/faq/repo-site.md)
 

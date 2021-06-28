@@ -37,6 +37,7 @@
     "url": "https://github.com/vuepress-reco/vuepress-theme-reco/issues"
   },
   "dependencies": {
+    "@antv/g6": "^4.3.3",
     "@vue/composition-api": "^1.0.0-beta.20",
     "@vuepress-reco/core": "^1.6.2",
     "@vuepress-reco/vuepress-plugin-back-to-top": "^1.6.0",
